@@ -1,8 +1,6 @@
 # AB731-Microsoft-Certified-AI-Transformation-Leader
 My study note on passing Microsoft Certified : AI Transformation Leader Exam in 6 Days
 
-# AB-731 (Microsoft AI Transformation Leader) — Study Guide
-
 *A free, community study guide for the AB-731 exam — built while preparing for and passing the exam. Not an official Microsoft resource; all content is original explanation, not copied exam questions.*
 
 **Exam format:** 45 minutes · Pass score 700/1000
