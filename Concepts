@@ -1,0 +1,1196 @@
+# AB-731 (Microsoft AI Transformation Leader) — Study Guide
+
+*A free, community study guide for the AB-731 exam — built while preparing for and passing the exam. Not an official Microsoft resource; all content is original explanation, not copied exam questions.*
+
+**Exam format:** 45 minutes · Pass score 700/1000
+
+> 💡 **The exam's one governing rule:** Choose the simplest solution that meets the business need. Never default to the most advanced option. This decides more questions than any single fact in this guide.
+
+---
+
+## Table of Contents
+
+1. [Foundations: 3 Types of AI & Choosing One](#module-1--foundations-3-types-of-ai--choosing-one)
+2. [Cost, Risk & Business Value](#module-2--cost-risk--business-value)
+3. [Prompting, Grounding & RAG](#module-3--prompting-grounding--rag)
+4. [Data, Security & the ML Lifecycle](#module-4--data-security--the-ml-lifecycle)
+5. [Microsoft 365 Copilot Ecosystem](#module-5--microsoft-365-copilot-ecosystem)
+6. [Foundry Tools & Matching a Model](#module-6--foundry-tools--matching-a-model)
+7. [Responsible AI & Governance](#module-7--responsible-ai--governance)
+8. [Driving AI Adoption](#module-8--driving-ai-adoption)
+9. [Rapid-Fire Review (exam morning)](#module-9--rapid-fire-review-exam-morning)
+
+---
+
+## Module 1 — Foundations: 3 Types of AI & Choosing One
+
+**Objectives:** tell apart generative AI, ML, and rule-based systems · apply the 4-step selection method · explain transfer learning & the customisation ladder
+
+**Three types of AI — not two.** Most people know generative AI vs. ML. The exam also tests rule-based systems: explicit if/then logic written by humans, no learning involved.
+
+| | Generative AI | Traditional AI/ML | Rule-based |
+|---|---|---|---|
+| **What it does** | Creates new content | Classifies/predicts from data | Follows fixed human logic |
+| **Output** | New content | Categories/probabilities | Same result every time |
+| **Best for** | Writing, creative work | Forecasting, scoring at scale | Regulated, must-be-explainable |
+| **Limitation** | Probabilistic, may be inaccurate | Needs labelled data | Can't adapt without reprogramming |
+
+**The 4-step selection method:**
+
+| Step | Ask yourself |
+|---|---|
+| 1. Define the problem | What task needs automating or augmenting? |
+| 2. Assess complexity | Structured/rules-based, or open-ended/creative? |
+| 3. Consider data sensitivity & scale | Confidential/regulated data? What volume? |
+| 4. Apply the decision framework | Match task type to AI type |
+
+**The customisation ladder** — climb only as far as you need: Prompt engineering → RAG/grounding → fine-tuning → train your own model.
+
+**Transfer learning** is the principle underneath all of this: knowledge learned on one task carries over to new tasks — why adapting a foundation model is dramatically cheaper than training one from scratch.
+
+| Pretrained (foundational) model | Fine-tuned model |
+|---|---|
+| Trained on the largest datasets — general-purpose, broad | Builds ON TOP of a pretrained model with added specific training |
+| Fast to deploy, cost-effective, ready out of the box | Improves domain accuracy — but costs more time/data/maintenance |
+
+> ⚠️ **Trade-offs to weigh at every step of the ladder:** more capable models cost more · faster models may reduce quality · customisation adds ongoing maintenance overhead. There's no free upgrade — every rung up the customisation ladder trades one thing for another.
+
+**✅ Knowledge check**
+- Q: Bank needs identical, fully auditable claims decisions. **A: Rule-based system**
+- Q: Does fine-tuning change facts or behaviour? **A: Behaviour, style, format — not facts**
+- Q: Name the 4 rungs of the customisation ladder in order. **A: Prompt engineering → RAG/grounding → fine-tuning → train your own model**
+- Q: A team needs a model fast, for general tasks, at minimum cost. Pretrained or fine-tuned? **A: Pretrained — fine-tuning only when general accuracy isn't enough**
+
+---
+
+## Module 2 — Cost, Risk & Business Value
+
+**Objectives:** name the 4 cost layers & how ROI is judged · explain the 3 risks and their mitigations · distinguish automation from augmentation
+
+| Cost layer | What it covers |
+|---|---|
+| Token economics | Input + output tokens; ~4 characters ≈ ¾ of a word |
+| Infrastructure | Compute (GPU/TPU), storage, networking/API calls |
+| TCO | API + fine-tuning + RAG infra + training + change management |
+| ROI | Time saved, productivity gains, quality improvement — weighed against TCO |
+
+**The 3 risks and their mitigations:**
+
+| Risk | Looks like | Mitigation |
+|---|---|---|
+| Fabrication (hallucination) | Cites a source that doesn't exist | Grounding |
+| Reliability | Same prompt, different quality | Content filtering |
+| Bias | Outputs favour/disadvantage a group | Human review |
+
+**Automation vs. augmentation:** correct answers favour AI *assisting* humans over fully replacing them, especially in business-critical scenarios.
+
+> 💡 **Don't focus on cost alone.** Always evaluate cost vs. business value together — choose the approach that balances both, not just the cheapest option.
+
+**High-value use cases:** content at scale, customer support (24/7, no staffing constraints), document processing at volume.
+**Avoid generative AI when:** guaranteed accuracy is required (medical/legal), it's simple classification (ML is cheaper), or it's a fixed-rule process (automation scripts win).
+
+**✅ Knowledge check**
+- Q: Which mitigation pairs with "outputs favour one group"? **A: Human review** (root cause: bias)
+- Q: Why does the exam reject "always fully automate" for high-stakes work? **A: Augmentation (human-in-the-loop) is preferred**
+
+---
+
+## Module 3 — Prompting, Grounding & RAG
+
+**Objectives:** explain prompt engineering's business impact · explain grounding · walk RAG's 3 components + 3 patterns · compare RAG vs. fine-tuning
+
+**Prompt engineering** — role/persona, clear instructions, examples (zero/one/few-shot), output format, step-by-step reasoning. Try this first: every token costs money, and better prompts mean fewer costly retries.
+
+**Grounding** connects a model to trusted external data so responses reflect current, authoritative information. Required whenever a scenario involves organisational data, up-to-date info, or accuracy requirements.
+
+RAG's 3 core components: an **embedding model**, a **vector/search index**, and a **language model**. If the wrong data is retrieved, the answer will be wrong even though the model behaves exactly as designed — suspect retrieval quality first.
+
+| RAG pattern | Meaning |
+|---|---|
+| Basic RAG | Single retrieval, then generation |
+| Multi-step/iterative RAG | Multiple retrieval/refinement passes |
+| Agentic RAG | Tools/workflows dynamically select and retrieve |
+
+**RAG vs. fine-tuning — the most-tested comparison:**
+
+| RAG | Fine-tuning |
+|---|---|
+| Adds knowledge/facts at question time | Adjusts behaviour, style, format |
+| Data changes often? Just re-index | New data needs another training run |
+| Cheaper, faster, attributable (citations) | Expensive, curated data, no citations |
+
+**✅ Knowledge check**
+- Q: Legal needs answers from daily-changing contracts, cited, no retraining. **A: RAG**
+- Q: Grounded chatbot gives wrong answers, model behaves normally. **A: Retrieval quality issue**
+- Q: Name RAG's 3 core components. **A: Embedding model, vector/search index, language model**
+
+---
+
+## Module 4 — Data, Security & the ML Lifecycle
+
+**Objectives:** name the 5 data quality dimensions · apply the CIA triad & 4 AI threats · walk the ML lifecycle incl. overfitting/underfitting/drift
+
+| Data quality dimension | Meaning |
+|---|---|
+| Accuracy | Correct and error-free |
+| Completeness | Fully populated, not missing |
+| Consistency | Aligned definitions across sources |
+| Timeliness | Up to date |
+| Relevance | Task-appropriate |
+
+**3 data types — know the difference:** structured (rows/columns, e.g. a spreadsheet or database), semi-structured (some organisation but not rigid, e.g. JSON, emails with metadata), unstructured (no predefined format, e.g. free text, images, audio). Unstructured data points to generative AI; structured/numerical data points to traditional ML.
+
+**Representative datasets** reflect the real population the system serves — non-representative data introduces bias. AI performance is directly tied to data quality — spot when data, not the model, is the root cause.
+
+**Secure AI — CIA triad (Confidentiality, Integrity, Availability) + 4 threats:**
+
+| Threat | Meaning |
+|---|---|
+| Prompt injection | Malicious instructions embedded in inputs |
+| Data leakage | Sensitive data unintentionally exposed in outputs |
+| Model misuse | AI used outside its intended, safe purpose |
+| Training data attacks | Attacker corrupts/poisons training data |
+
+**Security spans the whole solution, not just the model:**
+
+| Security layer | What to check for |
+|---|---|
+| Application security | User input, prompts, outputs — prompt injection, improper input handling, unsafe outputs |
+| Data security | Protection at rest, in transit, and in use — especially for sensitive/regulated data |
+| Authentication vs. Authorization | AuthN = verifies WHO you are · AuthZ = controls WHAT you can access — both via identity and role-based permissions |
+| Compliance | Privacy laws, auditing, regulatory controls — required whenever the scenario references them |
+
+**ML Lifecycle:**
+
+| Stage | Detail |
+|---|---|
+| Data preparation | 60-80% of project time — #1 cause of ML project failure |
+| Model training | Select algorithm, split data, tune hyperparameters |
+| Evaluation | Overfitting (good on training, poor on new data) · underfitting (fails to capture patterns) · accuracy/precision/recall/F1 |
+| Deployment | Model available for real-world use |
+| Monitor & retrain | Model drift — performance degrades as real-world patterns change |
+
+**✅ Knowledge check**
+- Q: Share of ML project time on data prep, and why it matters? **A: 60-80% — top cause of project failure**
+- Q: Model great on training data, poor on new data. **A: Overfitting**
+- Q: Performance degrades over months as patterns shift. **A: Model drift → monitor and retrain**
+
+---
+
+## Module 5 — Microsoft 365 Copilot Ecosystem
+
+**Objectives:** enterprise vs. consumer Copilot · the 3 licensing tiers · map tasks to apps · Copilot Studio & Graph · Researcher vs. Analyst · Build/Buy/Extend
+
+| | M365 Copilot (enterprise) | Consumer Copilot |
+|---|---|---|
+| Data reach | Org data via Microsoft Graph | Public info + user content only |
+| Security | Existing controls, role-based access | No tenant governance |
+| Choose when | Internal data & compliance needs | Only public info needed |
+
+| | M365 Copilot Chat | M365 Copilot (add-on) |
+|---|---|---|
+| Cost | Included with M365 | Paid, per-user/month |
+| Grounding | Web only + uploaded files | Web + work data via Graph |
+| In-app Copilot | No | Yes (Word/Excel/PPT/Outlook/Teams) |
+| Researcher & Analyst | No | Yes |
+
+**Task → app mapping:**
+
+| Task signal | App |
+|---|---|
+| "Draft a report" | Word |
+| "Analyse sales data" | Excel |
+| "Build a deck" | PowerPoint |
+| "Summarise this thread" | Outlook |
+| "Recap a meeting" | Teams |
+
+**Copilot Studio:** low-code platform for custom topics/flows connected to internal data — "the middle ground" between out-of-box Copilot and full custom Azure AI development.
+
+**Microsoft Graph:** connects M365 data so Copilot retrieves relevant context in real time — permission-trimmed, only returns data the user can already access.
+
+| | Researcher | Analyst |
+|---|---|---|
+| Use for | Investigating, synthesising, comparing | Analysing metrics, interpreting numbers |
+| Signal words | research, summarise, explore, compare | analyse, evaluate, trends, metrics |
+
+**Build / Buy / Extend:** start with **Buy** → **Extend** only when needed → **Build** only as a last resort.
+
+**The integrated Microsoft AI solution** — Copilot + Graph + Identity + Compliance + Responsible AI combined into ONE system. This is why Microsoft 365 Copilot is preferred over standalone third-party AI tools whenever security, governance, or organisational data are involved: it inherits identity-based access, permission-trimming, DLP, auditing, and content safety automatically — built in, not bolted on.
+
+**Copilot licensing by adoption stage:**
+
+| Copilot licensing | Best for |
+|---|---|
+| Included with M365 | Early exploration, low barrier |
+| Monthly per-user (add-on) | Daily use, core productivity roles |
+| Pay-as-you-go (linked to Azure subscription) | Pilots, variable usage |
+
+> ⚠️ **Don't confuse Copilot licensing with Azure AI/Foundry subscription models** (see Module 8) — they're two separate systems. A prepaid/committed-capacity model belongs to Azure AI workloads, not Copilot end-user licensing.
+
+**Agent types (when a scenario asks you to build one):**
+
+| Agent type | When to use |
+|---|---|
+| Declarative agent | Low-code/no-code, built in Copilot Studio, follows predefined instructions, grounded in M365 data via Graph — no developer required |
+| Custom engine agent | Needs a developer — custom orchestration/model, capabilities beyond declarative |
+| Microsoft Copilot Chat | Not a buildable agent type — it's the built-in general chat experience itself |
+
+**✅ Knowledge check**
+- Q: Scenario mentions internal data, security, compliance. **A: Microsoft 365 Copilot**
+- Q: "Evaluate the trends and metrics." Use: **A: Analyst**
+- Q: Copilot must follow business logic, connect to internal systems. **A: Extend (via Copilot Studio)**
+- Q: Why choose an integrated Microsoft AI solution over a standalone AI tool? **A: It inherits identity access, permission-trimming, DLP, auditing & content safety automatically**
+- Q: No developer budget, predefined instructions, M365-grounded — what agent type? **A: Declarative agent**
+
+---
+
+## Module 6 — Foundry Tools & Matching a Model
+
+**Objectives:** know when to reach for Foundry Tools · name the key services · match generative vs. ML models to a need
+
+**Copilot is for USING AI. Foundry is for RUNNING and MANAGING AI at scale.** Reach for Foundry Tools when a scenario needs custom models, RAG pipelines, multi-step orchestration, or lifecycle governance.
+
+| Service | What it does |
+|---|---|
+| Azure AI services | Prebuilt APIs — vision, speech, language — no training required |
+| Azure Vision | Image/video analysis, OCR, visual inspection |
+| Azure AI Search | Intelligent discovery — powers RAG patterns |
+| Azure Document Intelligence | Extracts structured data from documents (forms, invoices, contracts) |
+| Azure Content Understanding | Extracts structured fields from documents/content and organizes output for reporting/analytics — related to, but distinct from, Document Intelligence |
+| Microsoft Foundry | Unified platform to build/deploy/manage AI under governance |
+
+> ⚠️ **Watch the extraction-tool traps:** model fine-tuning and prompt flow are NEVER the answer to an "extract fields / structure data" question — fine-tuning adjusts model behaviour, prompt flow orchestrates workflows. Neither extracts or structures data.
+
+| Generative models | Traditional ML models |
+|---|---|
+| LLMs — drafting, summarising, reasoning | Regression/classification/clustering |
+| Best for natural language, code, creative content | Best for precise predictions, scoring, patterns |
+
+Also recognise: **SLMs** (small, cheap, fast, on-device) and **embedding models** (power semantic search/RAG retrieval).
+
+**Foundry at enterprise scale:** a unified platform for building, deploying, and managing AI — supports scaling from pilot to production without redesign. Security/governance are core differentiators: identity-based access, encryption, monitoring, policy enforcement. Choose Foundry when AI must be managed reliably over time, not just implemented once.
+
+**✅ Knowledge check**
+- Q: Custom models, RAG pipelines, lifecycle governance needed. **A: Foundry Tools**
+- Q: Extract structured fields from thousands of contracts and prepare for reporting. **A: Azure Content Understanding (or Document Intelligence, depending on options given) — never fine-tuning or prompt flow**
+
+---
+
+## Module 7 — Responsible AI & Governance
+
+**Objectives:** recall all 6 Responsible AI standards · distinguish Fairness from Inclusiveness · explain AI governance & the AI council
+
+**Why responsible AI matters:** it's foundational, not optional — the core purpose is building trust while preventing harm and risk. **Human accountability:** AI assists, but humans always remain responsible for the decisions it informs — this is tested directly on the exam.
+
+| Standard | What it requires |
+|---|---|
+| Fairness | Must not systematically disadvantage individuals/groups |
+| Inclusiveness | Everyone can use and benefit from the system |
+| Reliability & Safety | Accurate, dependable, fails safely |
+| Privacy & Security | Personal/sensitive data protected throughout |
+| Transparency | Users know AI is involved and how it influences outcomes |
+| Accountability | Decisions are explainable, reviewable, clearly owned |
+
+> ⚠️ **The classic trap:** Fairness = outcomes don't harm a group. Inclusiveness = everyone CAN use and benefit. These are constantly confused on the exam.
+
+**AI governance** defines rules for how AI is developed, deployed, monitored, and retired — the full lifecycle.
+
+**The AI council** is a cross-functional group (business, IT, legal, security, compliance) setting strategy, reviewing compliance/ethics, monitoring risk — preventing fragmented, ad-hoc adoption.
+
+**Preventive vs. detective controls:** when a scenario asks for a safeguard to intervene on high-risk AI actions, favor built-in, real-time controls (RBAC tied to identity, kill-switches) over "periodic manual review" — periodic review is detective (catches problems after the fact), not preventative.
+
+**✅ Knowledge check**
+- Q: AI gives worse recommendations to one demographic group. **A: Fairness**
+- Q: A group technically has access but can't effectively use the tool. **A: Inclusiveness**
+- Q: Company requires identity-based access, traceability, and a safeguard to intervene on high-risk events. **A: RBAC integrated with organisational identity + controlled real-time intervention — not periodic manual review**
+
+---
+
+## Module 8 — Driving AI Adoption
+
+**Objectives:** adoption team vs. AI council · the 6-phase rollout · 4 barrier categories & AI champions · licensing by adoption stage
+
+**Adoption team vs. AI council — don't mix these up:** the **AI council** sets strategy and governance (the "what" and "why"). The **adoption team** drives actual day-to-day usage — translating strategy into real behaviour change. It's cross-functional and ongoing, never a one-time rollout. Low usage or confusion in a scenario signals a missing/weak adoption team, not a governance problem.
+
+**The 6-phase rollout:**
+
+| Phase | What happens |
+|---|---|
+| 1. Define strategy & metrics | Set goals and how success will be measured before rollout starts |
+| 2. Secure data first | Audit permissions & sensitivity labels BEFORE wide rollout |
+| 3. Pilot small group | Test with a limited, controlled group first |
+| 4. Measure & feedback | Collect real usage data and user feedback from the pilot |
+| 5. Refine & scale in waves | Adjust based on feedback, then roll out in stages — not all at once |
+| 6. Monitor usage & outcomes | Ongoing tracking after rollout — adoption is never "done" |
+
+**4 barrier categories:**
+
+| Barrier category | Examples |
+|---|---|
+| People-related | Fear of job replacement, low confidence, lack of training |
+| Process & integration | AI disrupts workflows, unclear guidance |
+| Trust & risk | Privacy, accuracy, reliability, bias concerns |
+| Leadership & alignment | No clear ownership, no executive sponsorship |
+
+> 💡 **Resistance is the most common barrier.** Low usage = adoption failure, not capability failure. If uptake is poor, the fix is change management — never "buy a better model."
+
+**AI champions** are respected practitioners and early adopters — explicitly NOT senior leaders or IT staff. They extend, but never replace, the adoption team or governance.
+
+**Impacts of AI adoption — second-order effects to plan for as adoption grows:**
+
+| Impact area | What changes |
+|---|---|
+| Data | Greater reliance on high-quality data; exposes existing gaps in governance and access |
+| Security | Expanded risk surface — greater need for identity-based controls and data protection |
+| Privacy | AI interacts with sensitive/regulated data in new ways |
+| Cost | Consumption-based models scale with usage — require active cost governance |
+
+**Azure AI/Foundry subscription models** (separate from Copilot licensing — see Module 5):
+
+| Model | Best for |
+|---|---|
+| Pay-as-you-go | Usage-based, flexible — experimentation and variable demand |
+| Prepaid / commitment tier | Committed usage, predictable cost — steady production workloads |
+
+**Maturity signal:** organisations typically move from pay-as-you-go to prepaid as usage stabilises. Subscription models are part of cost governance, not just billing.
+
+> 🚨 **Exam trap:** "We restricted/limited AI usage to control costs" = a GOVERNANCE FAILURE. Correct cost governance manages HOW spend scales (budgets, tiers, monitoring) — never WHETHER AI is used. Memory trick: *"Govern the spend, not the use."*
+
+**✅ Knowledge check**
+- Q: Copilot deployed, usage low, staff confused. **A: Adoption failure**
+- Q: Who staffs an AI champions program? **A: Practitioners/early adopters, not IT or leaders**
+- Q: Name the 6 phases of the adoption rollout, in order. **A: Define strategy & metrics → Secure data first → Pilot small group → Measure & feedback → Refine & scale in waves → Monitor usage & outcomes**
+- Q: A workload has steady, predictable production usage. Which Azure AI subscription model fits? **A: Prepaid/commitment tier**
+
+---
+
+## Module 9 — Rapid-Fire Review (exam morning)
+
+| Cue | Answer |
+|---|---|
+| Create/draft NEW content | Generative AI |
+| Predict/classify from historical data | Machine learning |
+| Fixed if/then, deterministic, explainable | Rule-based system |
+| Made-up facts/fake citations | Fabrication → grounding + human review |
+| Company docs, current, cited, no retraining | RAG |
+| Grounded system still gives wrong answers | Retrieval quality issue |
+| Match model style/terminology to our domain | Fine-tuning |
+| 60-80% of an ML project | Data preparation |
+| Performance degrades over time | Model drift |
+| Internal data / security / compliance | Microsoft 365 Copilot |
+| Synthesise/compare → narrative report | Researcher |
+| Analyse/evaluate/trends/metrics | Analyst |
+| Custom models, RAG pipelines, governance | Foundry Tools |
+| Everyone can use and benefit | Inclusiveness |
+| Low usage, confusion | Adoption failure |
+| Grassroots, peers not mandates | AI champions |
+| "We limited AI usage to control costs" | Governance FAILURE (govern spend, not use) |
+| No dev budget, predefined instructions, M365-grounded | Declarative agent |
+
+---
+
+## A note on how this guide was built
+
+This guide started as personal study notes while preparing for AB-731, refined against the official Microsoft exam-prep materials and expanded after reviewing every practice question missed along the way — the goal was to turn each mistake into a rule that's easy to recognise next time. It reflects one person's exam experience and self-made practice material; it is **not** an official Microsoft resource and does not reproduce actual exam questions.
+
+Passed AB-731 with this guide — hope it saves you some of the searching I had to do. 🍀
+
+Maintained by **[@shazlearns](https://github.com/shazlearns)**. If you spot an error or have a correction, please open an issue or PR — and if this saved you some study time, a ⭐ on the repo goes a long way.
+
+# AB-731 (Microsoft AI Transformation Leader) — Study Guide
+
+*A free, community study guide for the AB-731 exam — built while preparing for and passing the exam. Not an official Microsoft resource; all content is original explanation, not copied exam questions.*
+
+**Exam format:** 45 minutes · Pass score 700/1000
+
+> 💡 **The exam's one governing rule:** Choose the simplest solution that meets the business need. Never default to the most advanced option. This decides more questions than any single fact in this guide.
+
+---
+
+## Table of Contents
+
+1. [Foundations: 3 Types of AI & Choosing One](#module-1--foundations-3-types-of-ai--choosing-one)
+2. [Cost, Risk & Business Value](#module-2--cost-risk--business-value)
+3. [Prompting, Grounding & RAG](#module-3--prompting-grounding--rag)
+4. [Data, Security & the ML Lifecycle](#module-4--data-security--the-ml-lifecycle)
+5. [Microsoft 365 Copilot Ecosystem](#module-5--microsoft-365-copilot-ecosystem)
+6. [Foundry Tools & Matching a Model](#module-6--foundry-tools--matching-a-model)
+7. [Responsible AI & Governance](#module-7--responsible-ai--governance)
+8. [Driving AI Adoption](#module-8--driving-ai-adoption)
+9. [Rapid-Fire Review (exam morning)](#module-9--rapid-fire-review-exam-morning)
+
+---
+
+## Module 1 — Foundations: 3 Types of AI & Choosing One
+
+**Objectives:** tell apart generative AI, ML, and rule-based systems · apply the 4-step selection method · explain transfer learning & the customisation ladder
+
+**Three types of AI — not two.** Most people know generative AI vs. ML. The exam also tests rule-based systems: explicit if/then logic written by humans, no learning involved.
+
+| | Generative AI | Traditional AI/ML | Rule-based |
+|---|---|---|---|
+| **What it does** | Creates new content | Classifies/predicts from data | Follows fixed human logic |
+| **Output** | New content | Categories/probabilities | Same result every time |
+| **Best for** | Writing, creative work | Forecasting, scoring at scale | Regulated, must-be-explainable |
+| **Limitation** | Probabilistic, may be inaccurate | Needs labelled data | Can't adapt without reprogramming |
+
+**The 4-step selection method:**
+
+| Step | Ask yourself |
+|---|---|
+| 1. Define the problem | What task needs automating or augmenting? |
+| 2. Assess complexity | Structured/rules-based, or open-ended/creative? |
+| 3. Consider data sensitivity & scale | Confidential/regulated data? What volume? |
+| 4. Apply the decision framework | Match task type to AI type |
+
+**The customisation ladder** — climb only as far as you need: Prompt engineering → RAG/grounding → fine-tuning → train your own model.
+
+**Transfer learning** is the principle underneath all of this: knowledge learned on one task carries over to new tasks — why adapting a foundation model is dramatically cheaper than training one from scratch.
+
+| Pretrained (foundational) model | Fine-tuned model |
+|---|---|
+| Trained on the largest datasets — general-purpose, broad | Builds ON TOP of a pretrained model with added specific training |
+| Fast to deploy, cost-effective, ready out of the box | Improves domain accuracy — but costs more time/data/maintenance |
+
+> ⚠️ **Trade-offs to weigh at every step of the ladder:** more capable models cost more · faster models may reduce quality · customisation adds ongoing maintenance overhead. There's no free upgrade — every rung up the customisation ladder trades one thing for another.
+
+**✅ Knowledge check**
+- Q: Bank needs identical, fully auditable claims decisions. **A: Rule-based system**
+- Q: Does fine-tuning change facts or behaviour? **A: Behaviour, style, format — not facts**
+- Q: Name the 4 rungs of the customisation ladder in order. **A: Prompt engineering → RAG/grounding → fine-tuning → train your own model**
+- Q: A team needs a model fast, for general tasks, at minimum cost. Pretrained or fine-tuned? **A: Pretrained — fine-tuning only when general accuracy isn't enough**
+
+---
+
+## Module 2 — Cost, Risk & Business Value
+
+**Objectives:** name the 4 cost layers & how ROI is judged · explain the 3 risks and their mitigations · distinguish automation from augmentation
+
+| Cost layer | What it covers |
+|---|---|
+| Token economics | Input + output tokens; ~4 characters ≈ ¾ of a word |
+| Infrastructure | Compute (GPU/TPU), storage, networking/API calls |
+| TCO | API + fine-tuning + RAG infra + training + change management |
+| ROI | Time saved, productivity gains, quality improvement — weighed against TCO |
+
+**The 3 risks and their mitigations:**
+
+| Risk | Looks like | Mitigation |
+|---|---|---|
+| Fabrication (hallucination) | Cites a source that doesn't exist | Grounding |
+| Reliability | Same prompt, different quality | Content filtering |
+| Bias | Outputs favour/disadvantage a group | Human review |
+
+**Automation vs. augmentation:** correct answers favour AI *assisting* humans over fully replacing them, especially in business-critical scenarios.
+
+> 💡 **Don't focus on cost alone.** Always evaluate cost vs. business value together — choose the approach that balances both, not just the cheapest option.
+
+**High-value use cases:** content at scale, customer support (24/7, no staffing constraints), document processing at volume.
+**Avoid generative AI when:** guaranteed accuracy is required (medical/legal), it's simple classification (ML is cheaper), or it's a fixed-rule process (automation scripts win).
+
+**✅ Knowledge check**
+- Q: Which mitigation pairs with "outputs favour one group"? **A: Human review** (root cause: bias)
+- Q: Why does the exam reject "always fully automate" for high-stakes work? **A: Augmentation (human-in-the-loop) is preferred**
+
+---
+
+## Module 3 — Prompting, Grounding & RAG
+
+**Objectives:** explain prompt engineering's business impact · explain grounding · walk RAG's 3 components + 3 patterns · compare RAG vs. fine-tuning
+
+**Prompt engineering** — role/persona, clear instructions, examples (zero/one/few-shot), output format, step-by-step reasoning. Try this first: every token costs money, and better prompts mean fewer costly retries.
+
+**Grounding** connects a model to trusted external data so responses reflect current, authoritative information. Required whenever a scenario involves organisational data, up-to-date info, or accuracy requirements.
+
+RAG's 3 core components: an **embedding model**, a **vector/search index**, and a **language model**. If the wrong data is retrieved, the answer will be wrong even though the model behaves exactly as designed — suspect retrieval quality first.
+
+| RAG pattern | Meaning |
+|---|---|
+| Basic RAG | Single retrieval, then generation |
+| Multi-step/iterative RAG | Multiple retrieval/refinement passes |
+| Agentic RAG | Tools/workflows dynamically select and retrieve |
+
+**RAG vs. fine-tuning — the most-tested comparison:**
+
+| RAG | Fine-tuning |
+|---|---|
+| Adds knowledge/facts at question time | Adjusts behaviour, style, format |
+| Data changes often? Just re-index | New data needs another training run |
+| Cheaper, faster, attributable (citations) | Expensive, curated data, no citations |
+
+**✅ Knowledge check**
+- Q: Legal needs answers from daily-changing contracts, cited, no retraining. **A: RAG**
+- Q: Grounded chatbot gives wrong answers, model behaves normally. **A: Retrieval quality issue**
+- Q: Name RAG's 3 core components. **A: Embedding model, vector/search index, language model**
+
+---
+
+## Module 4 — Data, Security & the ML Lifecycle
+
+**Objectives:** name the 5 data quality dimensions · apply the CIA triad & 4 AI threats · walk the ML lifecycle incl. overfitting/underfitting/drift
+
+| Data quality dimension | Meaning |
+|---|---|
+| Accuracy | Correct and error-free |
+| Completeness | Fully populated, not missing |
+| Consistency | Aligned definitions across sources |
+| Timeliness | Up to date |
+| Relevance | Task-appropriate |
+
+**3 data types — know the difference:** structured (rows/columns, e.g. a spreadsheet or database), semi-structured (some organisation but not rigid, e.g. JSON, emails with metadata), unstructured (no predefined format, e.g. free text, images, audio). Unstructured data points to generative AI; structured/numerical data points to traditional ML.
+
+**Representative datasets** reflect the real population the system serves — non-representative data introduces bias. AI performance is directly tied to data quality — spot when data, not the model, is the root cause.
+
+**Secure AI — CIA triad (Confidentiality, Integrity, Availability) + 4 threats:**
+
+| Threat | Meaning |
+|---|---|
+| Prompt injection | Malicious instructions embedded in inputs |
+| Data leakage | Sensitive data unintentionally exposed in outputs |
+| Model misuse | AI used outside its intended, safe purpose |
+| Training data attacks | Attacker corrupts/poisons training data |
+
+**Security spans the whole solution, not just the model:**
+
+| Security layer | What to check for |
+|---|---|
+| Application security | User input, prompts, outputs — prompt injection, improper input handling, unsafe outputs |
+| Data security | Protection at rest, in transit, and in use — especially for sensitive/regulated data |
+| Authentication vs. Authorization | AuthN = verifies WHO you are · AuthZ = controls WHAT you can access — both via identity and role-based permissions |
+| Compliance | Privacy laws, auditing, regulatory controls — required whenever the scenario references them |
+
+**ML Lifecycle:**
+
+| Stage | Detail |
+|---|---|
+| Data preparation | 60-80% of project time — #1 cause of ML project failure |
+| Model training | Select algorithm, split data, tune hyperparameters |
+| Evaluation | Overfitting (good on training, poor on new data) · underfitting (fails to capture patterns) · accuracy/precision/recall/F1 |
+| Deployment | Model available for real-world use |
+| Monitor & retrain | Model drift — performance degrades as real-world patterns change |
+
+**✅ Knowledge check**
+- Q: Share of ML project time on data prep, and why it matters? **A: 60-80% — top cause of project failure**
+- Q: Model great on training data, poor on new data. **A: Overfitting**
+- Q: Performance degrades over months as patterns shift. **A: Model drift → monitor and retrain**
+
+---
+
+## Module 5 — Microsoft 365 Copilot Ecosystem
+
+**Objectives:** enterprise vs. consumer Copilot · the 3 licensing tiers · map tasks to apps · Copilot Studio & Graph · Researcher vs. Analyst · Build/Buy/Extend
+
+| | M365 Copilot (enterprise) | Consumer Copilot |
+|---|---|---|
+| Data reach | Org data via Microsoft Graph | Public info + user content only |
+| Security | Existing controls, role-based access | No tenant governance |
+| Choose when | Internal data & compliance needs | Only public info needed |
+
+| | M365 Copilot Chat | M365 Copilot (add-on) |
+|---|---|---|
+| Cost | Included with M365 | Paid, per-user/month |
+| Grounding | Web only + uploaded files | Web + work data via Graph |
+| In-app Copilot | No | Yes (Word/Excel/PPT/Outlook/Teams) |
+| Researcher & Analyst | No | Yes |
+
+**Task → app mapping:**
+
+| Task signal | App |
+|---|---|
+| "Draft a report" | Word |
+| "Analyse sales data" | Excel |
+| "Build a deck" | PowerPoint |
+| "Summarise this thread" | Outlook |
+| "Recap a meeting" | Teams |
+
+**Copilot Studio:** low-code platform for custom topics/flows connected to internal data — "the middle ground" between out-of-box Copilot and full custom Azure AI development.
+
+**Microsoft Graph:** connects M365 data so Copilot retrieves relevant context in real time — permission-trimmed, only returns data the user can already access.
+
+| | Researcher | Analyst |
+|---|---|---|
+| Use for | Investigating, synthesising, comparing | Analysing metrics, interpreting numbers |
+| Signal words | research, summarise, explore, compare | analyse, evaluate, trends, metrics |
+
+**Build / Buy / Extend:** start with **Buy** → **Extend** only when needed → **Build** only as a last resort.
+
+**The integrated Microsoft AI solution** — Copilot + Graph + Identity + Compliance + Responsible AI combined into ONE system. This is why Microsoft 365 Copilot is preferred over standalone third-party AI tools whenever security, governance, or organisational data are involved: it inherits identity-based access, permission-trimming, DLP, auditing, and content safety automatically — built in, not bolted on.
+
+**Copilot licensing by adoption stage:**
+
+| Copilot licensing | Best for |
+|---|---|
+| Included with M365 | Early exploration, low barrier |
+| Monthly per-user (add-on) | Daily use, core productivity roles |
+| Pay-as-you-go (linked to Azure subscription) | Pilots, variable usage |
+
+> ⚠️ **Don't confuse Copilot licensing with Azure AI/Foundry subscription models** (see Module 8) — they're two separate systems. A prepaid/committed-capacity model belongs to Azure AI workloads, not Copilot end-user licensing.
+
+**Agent types (when a scenario asks you to build one):**
+
+| Agent type | When to use |
+|---|---|
+| Declarative agent | Low-code/no-code, built in Copilot Studio, follows predefined instructions, grounded in M365 data via Graph — no developer required |
+| Custom engine agent | Needs a developer — custom orchestration/model, capabilities beyond declarative |
+| Microsoft Copilot Chat | Not a buildable agent type — it's the built-in general chat experience itself |
+
+**✅ Knowledge check**
+- Q: Scenario mentions internal data, security, compliance. **A: Microsoft 365 Copilot**
+- Q: "Evaluate the trends and metrics." Use: **A: Analyst**
+- Q: Copilot must follow business logic, connect to internal systems. **A: Extend (via Copilot Studio)**
+- Q: Why choose an integrated Microsoft AI solution over a standalone AI tool? **A: It inherits identity access, permission-trimming, DLP, auditing & content safety automatically**
+- Q: No developer budget, predefined instructions, M365-grounded — what agent type? **A: Declarative agent**
+
+---
+
+## Module 6 — Foundry Tools & Matching a Model
+
+**Objectives:** know when to reach for Foundry Tools · name the key services · match generative vs. ML models to a need
+
+**Copilot is for USING AI. Foundry is for RUNNING and MANAGING AI at scale.** Reach for Foundry Tools when a scenario needs custom models, RAG pipelines, multi-step orchestration, or lifecycle governance.
+
+| Service | What it does |
+|---|---|
+| Azure AI services | Prebuilt APIs — vision, speech, language — no training required |
+| Azure Vision | Image/video analysis, OCR, visual inspection |
+| Azure AI Search | Intelligent discovery — powers RAG patterns |
+| Azure Document Intelligence | Extracts structured data from documents (forms, invoices, contracts) |
+| Azure Content Understanding | Extracts structured fields from documents/content and organizes output for reporting/analytics — related to, but distinct from, Document Intelligence |
+| Microsoft Foundry | Unified platform to build/deploy/manage AI under governance |
+
+> ⚠️ **Watch the extraction-tool traps:** model fine-tuning and prompt flow are NEVER the answer to an "extract fields / structure data" question — fine-tuning adjusts model behaviour, prompt flow orchestrates workflows. Neither extracts or structures data.
+
+| Generative models | Traditional ML models |
+|---|---|
+| LLMs — drafting, summarising, reasoning | Regression/classification/clustering |
+| Best for natural language, code, creative content | Best for precise predictions, scoring, patterns |
+
+Also recognise: **SLMs** (small, cheap, fast, on-device) and **embedding models** (power semantic search/RAG retrieval).
+
+**Foundry at enterprise scale:** a unified platform for building, deploying, and managing AI — supports scaling from pilot to production without redesign. Security/governance are core differentiators: identity-based access, encryption, monitoring, policy enforcement. Choose Foundry when AI must be managed reliably over time, not just implemented once.
+
+**✅ Knowledge check**
+- Q: Custom models, RAG pipelines, lifecycle governance needed. **A: Foundry Tools**
+- Q: Extract structured fields from thousands of contracts and prepare for reporting. **A: Azure Content Understanding (or Document Intelligence, depending on options given) — never fine-tuning or prompt flow**
+
+---
+
+## Module 7 — Responsible AI & Governance
+
+**Objectives:** recall all 6 Responsible AI standards · distinguish Fairness from Inclusiveness · explain AI governance & the AI council
+
+**Why responsible AI matters:** it's foundational, not optional — the core purpose is building trust while preventing harm and risk. **Human accountability:** AI assists, but humans always remain responsible for the decisions it informs — this is tested directly on the exam.
+
+| Standard | What it requires |
+|---|---|
+| Fairness | Must not systematically disadvantage individuals/groups |
+| Inclusiveness | Everyone can use and benefit from the system |
+| Reliability & Safety | Accurate, dependable, fails safely |
+| Privacy & Security | Personal/sensitive data protected throughout |
+| Transparency | Users know AI is involved and how it influences outcomes |
+| Accountability | Decisions are explainable, reviewable, clearly owned |
+
+> ⚠️ **The classic trap:** Fairness = outcomes don't harm a group. Inclusiveness = everyone CAN use and benefit. These are constantly confused on the exam.
+
+**AI governance** defines rules for how AI is developed, deployed, monitored, and retired — the full lifecycle.
+
+**The AI council** is a cross-functional group (business, IT, legal, security, compliance) setting strategy, reviewing compliance/ethics, monitoring risk — preventing fragmented, ad-hoc adoption.
+
+**Preventive vs. detective controls:** when a scenario asks for a safeguard to intervene on high-risk AI actions, favor built-in, real-time controls (RBAC tied to identity, kill-switches) over "periodic manual review" — periodic review is detective (catches problems after the fact), not preventative.
+
+**✅ Knowledge check**
+- Q: AI gives worse recommendations to one demographic group. **A: Fairness**
+- Q: A group technically has access but can't effectively use the tool. **A: Inclusiveness**
+- Q: Company requires identity-based access, traceability, and a safeguard to intervene on high-risk events. **A: RBAC integrated with organisational identity + controlled real-time intervention — not periodic manual review**
+
+---
+
+## Module 8 — Driving AI Adoption
+
+**Objectives:** adoption team vs. AI council · the 6-phase rollout · 4 barrier categories & AI champions · licensing by adoption stage
+
+**Adoption team vs. AI council — don't mix these up:** the **AI council** sets strategy and governance (the "what" and "why"). The **adoption team** drives actual day-to-day usage — translating strategy into real behaviour change. It's cross-functional and ongoing, never a one-time rollout. Low usage or confusion in a scenario signals a missing/weak adoption team, not a governance problem.
+
+**The 6-phase rollout:**
+
+| Phase | What happens |
+|---|---|
+| 1. Define strategy & metrics | Set goals and how success will be measured before rollout starts |
+| 2. Secure data first | Audit permissions & sensitivity labels BEFORE wide rollout |
+| 3. Pilot small group | Test with a limited, controlled group first |
+| 4. Measure & feedback | Collect real usage data and user feedback from the pilot |
+| 5. Refine & scale in waves | Adjust based on feedback, then roll out in stages — not all at once |
+| 6. Monitor usage & outcomes | Ongoing tracking after rollout — adoption is never "done" |
+
+**4 barrier categories:**
+
+| Barrier category | Examples |
+|---|---|
+| People-related | Fear of job replacement, low confidence, lack of training |
+| Process & integration | AI disrupts workflows, unclear guidance |
+| Trust & risk | Privacy, accuracy, reliability, bias concerns |
+| Leadership & alignment | No clear ownership, no executive sponsorship |
+
+> 💡 **Resistance is the most common barrier.** Low usage = adoption failure, not capability failure. If uptake is poor, the fix is change management — never "buy a better model."
+
+**AI champions** are respected practitioners and early adopters — explicitly NOT senior leaders or IT staff. They extend, but never replace, the adoption team or governance.
+
+**Impacts of AI adoption — second-order effects to plan for as adoption grows:**
+
+| Impact area | What changes |
+|---|---|
+| Data | Greater reliance on high-quality data; exposes existing gaps in governance and access |
+| Security | Expanded risk surface — greater need for identity-based controls and data protection |
+| Privacy | AI interacts with sensitive/regulated data in new ways |
+| Cost | Consumption-based models scale with usage — require active cost governance |
+
+**Azure AI/Foundry subscription models** (separate from Copilot licensing — see Module 5):
+
+| Model | Best for |
+|---|---|
+| Pay-as-you-go | Usage-based, flexible — experimentation and variable demand |
+| Prepaid / commitment tier | Committed usage, predictable cost — steady production workloads |
+
+**Maturity signal:** organisations typically move from pay-as-you-go to prepaid as usage stabilises. Subscription models are part of cost governance, not just billing.
+
+> 🚨 **Exam trap:** "We restricted/limited AI usage to control costs" = a GOVERNANCE FAILURE. Correct cost governance manages HOW spend scales (budgets, tiers, monitoring) — never WHETHER AI is used. Memory trick: *"Govern the spend, not the use."*
+
+**✅ Knowledge check**
+- Q: Copilot deployed, usage low, staff confused. **A: Adoption failure**
+- Q: Who staffs an AI champions program? **A: Practitioners/early adopters, not IT or leaders**
+- Q: Name the 6 phases of the adoption rollout, in order. **A: Define strategy & metrics → Secure data first → Pilot small group → Measure & feedback → Refine & scale in waves → Monitor usage & outcomes**
+- Q: A workload has steady, predictable production usage. Which Azure AI subscription model fits? **A: Prepaid/commitment tier**
+
+---
+
+## Module 9 — Rapid-Fire Review (exam morning)
+
+| Cue | Answer |
+|---|---|
+| Create/draft NEW content | Generative AI |
+| Predict/classify from historical data | Machine learning |
+| Fixed if/then, deterministic, explainable | Rule-based system |
+| Made-up facts/fake citations | Fabrication → grounding + human review |
+| Company docs, current, cited, no retraining | RAG |
+| Grounded system still gives wrong answers | Retrieval quality issue |
+| Match model style/terminology to our domain | Fine-tuning |
+| 60-80% of an ML project | Data preparation |
+| Performance degrades over time | Model drift |
+| Internal data / security / compliance | Microsoft 365 Copilot |
+| Synthesise/compare → narrative report | Researcher |
+| Analyse/evaluate/trends/metrics | Analyst |
+| Custom models, RAG pipelines, governance | Foundry Tools |
+| Everyone can use and benefit | Inclusiveness |
+| Low usage, confusion | Adoption failure |
+| Grassroots, peers not mandates | AI champions |
+| "We limited AI usage to control costs" | Governance FAILURE (govern spend, not use) |
+| No dev budget, predefined instructions, M365-grounded | Declarative agent |
+
+---
+
+## A note on how this guide was built
+
+This guide started as personal study notes while preparing for AB-731, refined against the official Microsoft exam-prep materials and expanded after reviewing every practice question missed along the way — the goal was to turn each mistake into a rule that's easy to recognise next time. It reflects one person's exam experience and self-made practice material; it is **not** an official Microsoft resource and does not reproduce actual exam questions.
+
+Passed AB-731 with this guide — hope it saves you some of the searching I had to do. 🍀
+
+Maintained by **[@shazlearns](https://github.com/shazlearns)**. If you spot an error or have a correction, please open an issue or PR — and if this saved you some study time, a ⭐ on the repo goes a long way.
+
+# AB-731 (Microsoft AI Transformation Leader) — Study Guide
+
+*A free, community study guide for the AB-731 exam — built while preparing for and passing the exam. Not an official Microsoft resource; all content is original explanation, not copied exam questions.*
+
+**Exam format:** 45 minutes · Pass score 700/1000
+
+> 💡 **The exam's one governing rule:** Choose the simplest solution that meets the business need. Never default to the most advanced option. This decides more questions than any single fact in this guide.
+
+---
+
+## Table of Contents
+
+1. [Foundations: 3 Types of AI & Choosing One](#module-1--foundations-3-types-of-ai--choosing-one)
+2. [Cost, Risk & Business Value](#module-2--cost-risk--business-value)
+3. [Prompting, Grounding & RAG](#module-3--prompting-grounding--rag)
+4. [Data, Security & the ML Lifecycle](#module-4--data-security--the-ml-lifecycle)
+5. [Microsoft 365 Copilot Ecosystem](#module-5--microsoft-365-copilot-ecosystem)
+6. [Foundry Tools & Matching a Model](#module-6--foundry-tools--matching-a-model)
+7. [Responsible AI & Governance](#module-7--responsible-ai--governance)
+8. [Driving AI Adoption](#module-8--driving-ai-adoption)
+9. [Rapid-Fire Review (exam morning)](#module-9--rapid-fire-review-exam-morning)
+
+---
+
+## Module 1 — Foundations: 3 Types of AI & Choosing One
+
+**Objectives:** tell apart generative AI, ML, and rule-based systems · apply the 4-step selection method · explain transfer learning & the customisation ladder
+
+**Three types of AI — not two.** Most people know generative AI vs. ML. The exam also tests rule-based systems: explicit if/then logic written by humans, no learning involved.
+
+| | Generative AI | Traditional AI/ML | Rule-based |
+|---|---|---|---|
+| **What it does** | Creates new content | Classifies/predicts from data | Follows fixed human logic |
+| **Output** | New content | Categories/probabilities | Same result every time |
+| **Best for** | Writing, creative work | Forecasting, scoring at scale | Regulated, must-be-explainable |
+| **Limitation** | Probabilistic, may be inaccurate | Needs labelled data | Can't adapt without reprogramming |
+
+**The 4-step selection method:**
+
+| Step | Ask yourself |
+|---|---|
+| 1. Define the problem | What task needs automating or augmenting? |
+| 2. Assess complexity | Structured/rules-based, or open-ended/creative? |
+| 3. Consider data sensitivity & scale | Confidential/regulated data? What volume? |
+| 4. Apply the decision framework | Match task type to AI type |
+
+**The customisation ladder** — climb only as far as you need: Prompt engineering → RAG/grounding → fine-tuning → train your own model.
+
+**Transfer learning** is the principle underneath all of this: knowledge learned on one task carries over to new tasks — why adapting a foundation model is dramatically cheaper than training one from scratch.
+
+| Pretrained (foundational) model | Fine-tuned model |
+|---|---|
+| Trained on the largest datasets — general-purpose, broad | Builds ON TOP of a pretrained model with added specific training |
+| Fast to deploy, cost-effective, ready out of the box | Improves domain accuracy — but costs more time/data/maintenance |
+
+> ⚠️ **Trade-offs to weigh at every step of the ladder:** more capable models cost more · faster models may reduce quality · customisation adds ongoing maintenance overhead. There's no free upgrade — every rung up the customisation ladder trades one thing for another.
+
+**✅ Knowledge check**
+- Q: Bank needs identical, fully auditable claims decisions. **A: Rule-based system**
+- Q: Does fine-tuning change facts or behaviour? **A: Behaviour, style, format — not facts**
+- Q: Name the 4 rungs of the customisation ladder in order. **A: Prompt engineering → RAG/grounding → fine-tuning → train your own model**
+- Q: A team needs a model fast, for general tasks, at minimum cost. Pretrained or fine-tuned? **A: Pretrained — fine-tuning only when general accuracy isn't enough**
+
+---
+
+## Module 2 — Cost, Risk & Business Value
+
+**Objectives:** name the 4 cost layers & how ROI is judged · explain the 3 risks and their mitigations · distinguish automation from augmentation
+
+| Cost layer | What it covers |
+|---|---|
+| Token economics | Input + output tokens; ~4 characters ≈ ¾ of a word |
+| Infrastructure | Compute (GPU/TPU), storage, networking/API calls |
+| TCO | API + fine-tuning + RAG infra + training + change management |
+| ROI | Time saved, productivity gains, quality improvement — weighed against TCO |
+
+**The 3 risks and their mitigations:**
+
+| Risk | Looks like | Mitigation |
+|---|---|---|
+| Fabrication (hallucination) | Cites a source that doesn't exist | Grounding |
+| Reliability | Same prompt, different quality | Content filtering |
+| Bias | Outputs favour/disadvantage a group | Human review |
+
+**Automation vs. augmentation:** correct answers favour AI *assisting* humans over fully replacing them, especially in business-critical scenarios.
+
+> 💡 **Don't focus on cost alone.** Always evaluate cost vs. business value together — choose the approach that balances both, not just the cheapest option.
+
+**High-value use cases:** content at scale, customer support (24/7, no staffing constraints), document processing at volume.
+**Avoid generative AI when:** guaranteed accuracy is required (medical/legal), it's simple classification (ML is cheaper), or it's a fixed-rule process (automation scripts win).
+
+**✅ Knowledge check**
+- Q: Which mitigation pairs with "outputs favour one group"? **A: Human review** (root cause: bias)
+- Q: Why does the exam reject "always fully automate" for high-stakes work? **A: Augmentation (human-in-the-loop) is preferred**
+
+---
+
+## Module 3 — Prompting, Grounding & RAG
+
+**Objectives:** explain prompt engineering's business impact · explain grounding · walk RAG's 3 components + 3 patterns · compare RAG vs. fine-tuning
+
+**Prompt engineering** — role/persona, clear instructions, examples (zero/one/few-shot), output format, step-by-step reasoning. Try this first: every token costs money, and better prompts mean fewer costly retries.
+
+**Grounding** connects a model to trusted external data so responses reflect current, authoritative information. Required whenever a scenario involves organisational data, up-to-date info, or accuracy requirements.
+
+RAG's 3 core components: an **embedding model**, a **vector/search index**, and a **language model**. If the wrong data is retrieved, the answer will be wrong even though the model behaves exactly as designed — suspect retrieval quality first.
+
+| RAG pattern | Meaning |
+|---|---|
+| Basic RAG | Single retrieval, then generation |
+| Multi-step/iterative RAG | Multiple retrieval/refinement passes |
+| Agentic RAG | Tools/workflows dynamically select and retrieve |
+
+**RAG vs. fine-tuning — the most-tested comparison:**
+
+| RAG | Fine-tuning |
+|---|---|
+| Adds knowledge/facts at question time | Adjusts behaviour, style, format |
+| Data changes often? Just re-index | New data needs another training run |
+| Cheaper, faster, attributable (citations) | Expensive, curated data, no citations |
+
+**✅ Knowledge check**
+- Q: Legal needs answers from daily-changing contracts, cited, no retraining. **A: RAG**
+- Q: Grounded chatbot gives wrong answers, model behaves normally. **A: Retrieval quality issue**
+- Q: Name RAG's 3 core components. **A: Embedding model, vector/search index, language model**
+
+---
+
+## Module 4 — Data, Security & the ML Lifecycle
+
+**Objectives:** name the 5 data quality dimensions · apply the CIA triad & 4 AI threats · walk the ML lifecycle incl. overfitting/underfitting/drift
+
+| Data quality dimension | Meaning |
+|---|---|
+| Accuracy | Correct and error-free |
+| Completeness | Fully populated, not missing |
+| Consistency | Aligned definitions across sources |
+| Timeliness | Up to date |
+| Relevance | Task-appropriate |
+
+**3 data types — know the difference:** structured (rows/columns, e.g. a spreadsheet or database), semi-structured (some organisation but not rigid, e.g. JSON, emails with metadata), unstructured (no predefined format, e.g. free text, images, audio). Unstructured data points to generative AI; structured/numerical data points to traditional ML.
+
+**Representative datasets** reflect the real population the system serves — non-representative data introduces bias. AI performance is directly tied to data quality — spot when data, not the model, is the root cause.
+
+**Secure AI — CIA triad (Confidentiality, Integrity, Availability) + 4 threats:**
+
+| Threat | Meaning |
+|---|---|
+| Prompt injection | Malicious instructions embedded in inputs |
+| Data leakage | Sensitive data unintentionally exposed in outputs |
+| Model misuse | AI used outside its intended, safe purpose |
+| Training data attacks | Attacker corrupts/poisons training data |
+
+**Security spans the whole solution, not just the model:**
+
+| Security layer | What to check for |
+|---|---|
+| Application security | User input, prompts, outputs — prompt injection, improper input handling, unsafe outputs |
+| Data security | Protection at rest, in transit, and in use — especially for sensitive/regulated data |
+| Authentication vs. Authorization | AuthN = verifies WHO you are · AuthZ = controls WHAT you can access — both via identity and role-based permissions |
+| Compliance | Privacy laws, auditing, regulatory controls — required whenever the scenario references them |
+
+**ML Lifecycle:**
+
+| Stage | Detail |
+|---|---|
+| Data preparation | 60-80% of project time — #1 cause of ML project failure |
+| Model training | Select algorithm, split data, tune hyperparameters |
+| Evaluation | Overfitting (good on training, poor on new data) · underfitting (fails to capture patterns) · accuracy/precision/recall/F1 |
+| Deployment | Model available for real-world use |
+| Monitor & retrain | Model drift — performance degrades as real-world patterns change |
+
+**✅ Knowledge check**
+- Q: Share of ML project time on data prep, and why it matters? **A: 60-80% — top cause of project failure**
+- Q: Model great on training data, poor on new data. **A: Overfitting**
+- Q: Performance degrades over months as patterns shift. **A: Model drift → monitor and retrain**
+
+---
+
+## Module 5 — Microsoft 365 Copilot Ecosystem
+
+**Objectives:** enterprise vs. consumer Copilot · the 3 licensing tiers · map tasks to apps · Copilot Studio & Graph · Researcher vs. Analyst · Build/Buy/Extend
+
+| | M365 Copilot (enterprise) | Consumer Copilot |
+|---|---|---|
+| Data reach | Org data via Microsoft Graph | Public info + user content only |
+| Security | Existing controls, role-based access | No tenant governance |
+| Choose when | Internal data & compliance needs | Only public info needed |
+
+| | M365 Copilot Chat | M365 Copilot (add-on) |
+|---|---|---|
+| Cost | Included with M365 | Paid, per-user/month |
+| Grounding | Web only + uploaded files | Web + work data via Graph |
+| In-app Copilot | No | Yes (Word/Excel/PPT/Outlook/Teams) |
+| Researcher & Analyst | No | Yes |
+
+**Task → app mapping:**
+
+| Task signal | App |
+|---|---|
+| "Draft a report" | Word |
+| "Analyse sales data" | Excel |
+| "Build a deck" | PowerPoint |
+| "Summarise this thread" | Outlook |
+| "Recap a meeting" | Teams |
+
+**Copilot Studio:** low-code platform for custom topics/flows connected to internal data — "the middle ground" between out-of-box Copilot and full custom Azure AI development.
+
+**Microsoft Graph:** connects M365 data so Copilot retrieves relevant context in real time — permission-trimmed, only returns data the user can already access.
+
+| | Researcher | Analyst |
+|---|---|---|
+| Use for | Investigating, synthesising, comparing | Analysing metrics, interpreting numbers |
+| Signal words | research, summarise, explore, compare | analyse, evaluate, trends, metrics |
+
+**Build / Buy / Extend:** start with **Buy** → **Extend** only when needed → **Build** only as a last resort.
+
+**The integrated Microsoft AI solution** — Copilot + Graph + Identity + Compliance + Responsible AI combined into ONE system. This is why Microsoft 365 Copilot is preferred over standalone third-party AI tools whenever security, governance, or organisational data are involved: it inherits identity-based access, permission-trimming, DLP, auditing, and content safety automatically — built in, not bolted on.
+
+**Copilot licensing by adoption stage:**
+
+| Copilot licensing | Best for |
+|---|---|
+| Included with M365 | Early exploration, low barrier |
+| Monthly per-user (add-on) | Daily use, core productivity roles |
+| Pay-as-you-go (linked to Azure subscription) | Pilots, variable usage |
+
+> ⚠️ **Don't confuse Copilot licensing with Azure AI/Foundry subscription models** (see Module 8) — they're two separate systems. A prepaid/committed-capacity model belongs to Azure AI workloads, not Copilot end-user licensing.
+
+**Agent types (when a scenario asks you to build one):**
+
+| Agent type | When to use |
+|---|---|
+| Declarative agent | Low-code/no-code, built in Copilot Studio, follows predefined instructions, grounded in M365 data via Graph — no developer required |
+| Custom engine agent | Needs a developer — custom orchestration/model, capabilities beyond declarative |
+| Microsoft Copilot Chat | Not a buildable agent type — it's the built-in general chat experience itself |
+
+**✅ Knowledge check**
+- Q: Scenario mentions internal data, security, compliance. **A: Microsoft 365 Copilot**
+- Q: "Evaluate the trends and metrics." Use: **A: Analyst**
+- Q: Copilot must follow business logic, connect to internal systems. **A: Extend (via Copilot Studio)**
+- Q: Why choose an integrated Microsoft AI solution over a standalone AI tool? **A: It inherits identity access, permission-trimming, DLP, auditing & content safety automatically**
+- Q: No developer budget, predefined instructions, M365-grounded — what agent type? **A: Declarative agent**
+
+---
+
+## Module 6 — Foundry Tools & Matching a Model
+
+**Objectives:** know when to reach for Foundry Tools · name the key services · match generative vs. ML models to a need
+
+**Copilot is for USING AI. Foundry is for RUNNING and MANAGING AI at scale.** Reach for Foundry Tools when a scenario needs custom models, RAG pipelines, multi-step orchestration, or lifecycle governance.
+
+| Service | What it does |
+|---|---|
+| Azure AI services | Prebuilt APIs — vision, speech, language — no training required |
+| Azure Vision | Image/video analysis, OCR, visual inspection |
+| Azure AI Search | Intelligent discovery — powers RAG patterns |
+| Azure Document Intelligence | Extracts structured data from documents (forms, invoices, contracts) |
+| Azure Content Understanding | Extracts structured fields from documents/content and organizes output for reporting/analytics — related to, but distinct from, Document Intelligence |
+| Microsoft Foundry | Unified platform to build/deploy/manage AI under governance |
+
+> ⚠️ **Watch the extraction-tool traps:** model fine-tuning and prompt flow are NEVER the answer to an "extract fields / structure data" question — fine-tuning adjusts model behaviour, prompt flow orchestrates workflows. Neither extracts or structures data.
+
+| Generative models | Traditional ML models |
+|---|---|
+| LLMs — drafting, summarising, reasoning | Regression/classification/clustering |
+| Best for natural language, code, creative content | Best for precise predictions, scoring, patterns |
+
+Also recognise: **SLMs** (small, cheap, fast, on-device) and **embedding models** (power semantic search/RAG retrieval).
+
+**Foundry at enterprise scale:** a unified platform for building, deploying, and managing AI — supports scaling from pilot to production without redesign. Security/governance are core differentiators: identity-based access, encryption, monitoring, policy enforcement. Choose Foundry when AI must be managed reliably over time, not just implemented once.
+
+**✅ Knowledge check**
+- Q: Custom models, RAG pipelines, lifecycle governance needed. **A: Foundry Tools**
+- Q: Extract structured fields from thousands of contracts and prepare for reporting. **A: Azure Content Understanding (or Document Intelligence, depending on options given) — never fine-tuning or prompt flow**
+
+---
+
+## Module 7 — Responsible AI & Governance
+
+**Objectives:** recall all 6 Responsible AI standards · distinguish Fairness from Inclusiveness · explain AI governance & the AI council
+
+**Why responsible AI matters:** it's foundational, not optional — the core purpose is building trust while preventing harm and risk. **Human accountability:** AI assists, but humans always remain responsible for the decisions it informs — this is tested directly on the exam.
+
+| Standard | What it requires |
+|---|---|
+| Fairness | Must not systematically disadvantage individuals/groups |
+| Inclusiveness | Everyone can use and benefit from the system |
+| Reliability & Safety | Accurate, dependable, fails safely |
+| Privacy & Security | Personal/sensitive data protected throughout |
+| Transparency | Users know AI is involved and how it influences outcomes |
+| Accountability | Decisions are explainable, reviewable, clearly owned |
+
+> ⚠️ **The classic trap:** Fairness = outcomes don't harm a group. Inclusiveness = everyone CAN use and benefit. These are constantly confused on the exam.
+
+**AI governance** defines rules for how AI is developed, deployed, monitored, and retired — the full lifecycle.
+
+**The AI council** is a cross-functional group (business, IT, legal, security, compliance) setting strategy, reviewing compliance/ethics, monitoring risk — preventing fragmented, ad-hoc adoption.
+
+**Preventive vs. detective controls:** when a scenario asks for a safeguard to intervene on high-risk AI actions, favor built-in, real-time controls (RBAC tied to identity, kill-switches) over "periodic manual review" — periodic review is detective (catches problems after the fact), not preventative.
+
+**✅ Knowledge check**
+- Q: AI gives worse recommendations to one demographic group. **A: Fairness**
+- Q: A group technically has access but can't effectively use the tool. **A: Inclusiveness**
+- Q: Company requires identity-based access, traceability, and a safeguard to intervene on high-risk events. **A: RBAC integrated with organisational identity + controlled real-time intervention — not periodic manual review**
+
+---
+
+## Module 8 — Driving AI Adoption
+
+**Objectives:** adoption team vs. AI council · the 6-phase rollout · 4 barrier categories & AI champions · licensing by adoption stage
+
+**Adoption team vs. AI council — don't mix these up:** the **AI council** sets strategy and governance (the "what" and "why"). The **adoption team** drives actual day-to-day usage — translating strategy into real behaviour change. It's cross-functional and ongoing, never a one-time rollout. Low usage or confusion in a scenario signals a missing/weak adoption team, not a governance problem.
+
+**The 6-phase rollout:**
+
+| Phase | What happens |
+|---|---|
+| 1. Define strategy & metrics | Set goals and how success will be measured before rollout starts |
+| 2. Secure data first | Audit permissions & sensitivity labels BEFORE wide rollout |
+| 3. Pilot small group | Test with a limited, controlled group first |
+| 4. Measure & feedback | Collect real usage data and user feedback from the pilot |
+| 5. Refine & scale in waves | Adjust based on feedback, then roll out in stages — not all at once |
+| 6. Monitor usage & outcomes | Ongoing tracking after rollout — adoption is never "done" |
+
+**4 barrier categories:**
+
+| Barrier category | Examples |
+|---|---|
+| People-related | Fear of job replacement, low confidence, lack of training |
+| Process & integration | AI disrupts workflows, unclear guidance |
+| Trust & risk | Privacy, accuracy, reliability, bias concerns |
+| Leadership & alignment | No clear ownership, no executive sponsorship |
+
+> 💡 **Resistance is the most common barrier.** Low usage = adoption failure, not capability failure. If uptake is poor, the fix is change management — never "buy a better model."
+
+**AI champions** are respected practitioners and early adopters — explicitly NOT senior leaders or IT staff. They extend, but never replace, the adoption team or governance.
+
+**Impacts of AI adoption — second-order effects to plan for as adoption grows:**
+
+| Impact area | What changes |
+|---|---|
+| Data | Greater reliance on high-quality data; exposes existing gaps in governance and access |
+| Security | Expanded risk surface — greater need for identity-based controls and data protection |
+| Privacy | AI interacts with sensitive/regulated data in new ways |
+| Cost | Consumption-based models scale with usage — require active cost governance |
+
+**Azure AI/Foundry subscription models** (separate from Copilot licensing — see Module 5):
+
+| Model | Best for |
+|---|---|
+| Pay-as-you-go | Usage-based, flexible — experimentation and variable demand |
+| Prepaid / commitment tier | Committed usage, predictable cost — steady production workloads |
+
+**Maturity signal:** organisations typically move from pay-as-you-go to prepaid as usage stabilises. Subscription models are part of cost governance, not just billing.
+
+> 🚨 **Exam trap:** "We restricted/limited AI usage to control costs" = a GOVERNANCE FAILURE. Correct cost governance manages HOW spend scales (budgets, tiers, monitoring) — never WHETHER AI is used. Memory trick: *"Govern the spend, not the use."*
+
+**✅ Knowledge check**
+- Q: Copilot deployed, usage low, staff confused. **A: Adoption failure**
+- Q: Who staffs an AI champions program? **A: Practitioners/early adopters, not IT or leaders**
+- Q: Name the 6 phases of the adoption rollout, in order. **A: Define strategy & metrics → Secure data first → Pilot small group → Measure & feedback → Refine & scale in waves → Monitor usage & outcomes**
+- Q: A workload has steady, predictable production usage. Which Azure AI subscription model fits? **A: Prepaid/commitment tier**
+
+---
+
+## Module 9 — Rapid-Fire Review (exam morning)
+
+| Cue | Answer |
+|---|---|
+| Create/draft NEW content | Generative AI |
+| Predict/classify from historical data | Machine learning |
+| Fixed if/then, deterministic, explainable | Rule-based system |
+| Made-up facts/fake citations | Fabrication → grounding + human review |
+| Company docs, current, cited, no retraining | RAG |
+| Grounded system still gives wrong answers | Retrieval quality issue |
+| Match model style/terminology to our domain | Fine-tuning |
+| 60-80% of an ML project | Data preparation |
+| Performance degrades over time | Model drift |
+| Internal data / security / compliance | Microsoft 365 Copilot |
+| Synthesise/compare → narrative report | Researcher |
+| Analyse/evaluate/trends/metrics | Analyst |
+| Custom models, RAG pipelines, governance | Foundry Tools |
+| Everyone can use and benefit | Inclusiveness |
+| Low usage, confusion | Adoption failure |
+| Grassroots, peers not mandates | AI champions |
+| "We limited AI usage to control costs" | Governance FAILURE (govern spend, not use) |
+| No dev budget, predefined instructions, M365-grounded | Declarative agent |
+
+---
+
+## A note on how this guide was built
+
+This guide started as personal study notes while preparing for AB-731, refined against the official Microsoft exam-prep materials and expanded after reviewing every practice question missed along the way — the goal was to turn each mistake into a rule that's easy to recognise next time. It reflects one person's exam experience and self-made practice material; it is **not** an official Microsoft resource and does not reproduce actual exam questions.
+
+Passed AB-731 with this guide — hope it saves you some of the searching I had to do. 🍀
+
+Maintained by **[@shazlearns](https://github.com/shazlearns)**. If you spot an error or have a correction, please open an issue or PR — and if this saved you some study time, a ⭐ on the repo goes a long way.
